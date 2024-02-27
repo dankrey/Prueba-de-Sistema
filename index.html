@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encriptador de texto </title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="encriptar">
+            <div class="container-logo">
+                <img src="img/logo.svg" alt="" class="icon-logo">
+
+            </div>
+
+            <textarea id="texto" placeholder="Ingresar texto aquí" cols="30" rows="10" class="texto"></textarea>
+            <div class="terminos">
+                <img src="img/advertencia.png" alt="" class="icon">
+                <p>Solo letras minúsculas y sin acentos.</p>
+            </div>
+
+
+            <div class="botones ">
+                <button class="continue-application" onclick="encriptarTexto()">
+                    <div>
+                        <div class="pencil"></div>
+                        <div class="folder">
+                            <div class="top">
+                                <svg viewBox="0 0 24 27">
+                                    <path
+                                        d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="paper"></div>
+                        </div>
+                    </div>
+                    Encriptar
+                </button>
+
+                <button class="readmore-btn" value="Desencriptar" onclick="desencriptarTexto()">
+                    <span class="book-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="rgb(86, 69, 117)" viewBox="0 0 126 75"
+                            class="book">
+                            <rect stroke-width="3" stroke="#fff" rx="7.5" height="70" width="121" y="2.5" x="2.5">
+                            </rect>
+                            <line stroke-width="3" stroke="#fff" y2="75" x2="63.5" x1="63.5"></line>
+                            <path stroke-linecap="round" stroke-width="4" stroke="#fff" d="M25 20H50"></path>
+                            <path stroke-linecap="round" stroke-width="4" stroke="#fff" d="M101 20H76"></path>
+                            <path stroke-linecap="round" stroke-width="4" stroke="#fff" d="M16 30L50 30"></path>
+                            <path stroke-linecap="round" stroke-width="4" stroke="#fff" d="M110 30L76 30"></path>
+                        </svg>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 65 75" class="book-page">
+                            <path stroke-linecap="round" stroke-width="4" stroke="#fff" d="M40 20H15"></path>
+                            <path stroke-linecap="round" stroke-width="4" stroke="#fff" d="M49 30L15 30"></path>
+                            <path stroke-width="3" stroke="#fff"
+                                d="M2.5 2.5H55C59.1421 2.5 62.5 5.85786 62.5 10V65C62.5 69.1421 59.1421 72.5 55 72.5H2.5V2.5Z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span class="text">Desencriptar </span>
+                </button>
+
+
+            </div>
+        </div>
+        <div class="encriptado" id="encriptado-container">
+            <textarea id="resultado" readonly style="display: none;"></textarea>
+            <button id="btnCopiar" class="btn-copiar" onclick="copiarTexto()" style="display: none;">
+                <span><svg viewBox="0 0 467 512.22" clip-rule="evenodd" fill-rule="evenodd"
+                        image-rendering="optimizeQuality" text-rendering="geometricPrecision"
+                        shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" fill="#0E418F"
+                        height="12" width="12">
+                        <path
+                            d="M131.07 372.11c.37 1 .57 2.08.57 3.2 0 1.13-.2 2.21-.57 3.21v75.91c0 10.74 4.41 20.53 11.5 27.62s16.87 11.49 27.62 11.49h239.02c10.75 0 20.53-4.4 27.62-11.49s11.49-16.88 11.49-27.62V152.42c0-10.55-4.21-20.15-11.02-27.18l-.47-.43c-7.09-7.09-16.87-11.5-27.62-11.5H170.19c-10.75 0-20.53 4.41-27.62 11.5s-11.5 16.87-11.5 27.61v219.69zm-18.67 12.54H57.23c-15.82 0-30.1-6.58-40.45-17.11C6.41 356.97 0 342.4 0 326.52V57.79c0-15.86 6.5-30.3 16.97-40.78l.04-.04C27.51 6.49 41.94 0 57.79 0h243.63c15.87 0 30.3 6.51 40.77 16.98l.03.03c10.48 10.48 16.99 24.93 16.99 40.78v36.85h50c15.9 0 30.36 6.5 40.82 16.96l.54.58c10.15 10.44 16.43 24.66 16.43 40.24v302.01c0 15.9-6.5 30.36-16.96 40.82-10.47 10.47-24.93 16.97-40.83 16.97H170.19c-15.9 0-30.35-6.5-40.82-16.97-10.47-10.46-16.97-24.92-16.97-40.82v-69.78zM340.54 94.64V57.79c0-10.74-4.41-20.53-11.5-27.63-7.09-7.08-16.86-11.48-27.62-11.48H57.79c-10.78 0-20.56 4.38-27.62 11.45l-.04.04c-7.06 7.06-11.45 16.84-11.45 27.62v268.73c0 10.86 4.34 20.79 11.38 27.97 6.95 7.07 16.54 11.49 27.17 11.49h55.17V152.42c0-15.9 6.5-30.35 16.97-40.82 10.47-10.47 24.92-16.96 40.82-16.96h170.35z"
+                            fill-rule="nonzero"></path>
+                    </svg> Copiar</span>
+                <span>Copiado</span>
+            </button>
+
+
+            <div class="mensaje-encriptado" id="mensaje-encriptado">
+                <h2 id="welcome" class="welcome-message">Ningún mensaje fue encontrado</h2>
+                <p id="instruction">Ingresa el texto que deseas encriptar o desencriptar</p>
+
+            </div>
+
+            <img src="img/correo-electronico.gif" alt="" class="welcome-image">
+        </div>
+
+
+    </div>
+    <div id="notificacion" class="notificacion">
+        Texto copiado al portapapeles.
+    </div>
+
+
+</body>
+<script src="js.js"> </script>
+
+</html>
